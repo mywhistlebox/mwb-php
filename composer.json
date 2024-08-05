@@ -1,0 +1,29 @@
+{
+    "name": "mywhistlebox/mwb-sdk",
+    "description": "A PHP SDK to integrate with the MyWhistleBox platform",
+    "keywords": ["mywhistlebox", "secure documents", "api"],
+    "homepage": "http://github.com/mywhistlebox/mwb-php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MyWhistleBox SDK Team",
+            "email": "teamsdk@mywhistlebox.com",
+            "homepage": "https://developer.mywhistlebox.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/mywhistlebox/mwb-php/issues",
+        "source": "https://github.com/mywhistlebox/mwb-php"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mwb\\": "src/"
+        }
+    },    
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    }
+}
