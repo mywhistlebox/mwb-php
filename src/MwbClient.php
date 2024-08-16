@@ -216,6 +216,362 @@ class MwbClient extends BaseClient
         }
     }
 
+    public function reportLogUpload($startDate, $endDate, $limit=5000, $startAt=0)
+    {
+        $endpoint = "/report/log/upload";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'startDate',
+                'contents' => $startDate
+            ],
+            [
+                'name'     => 'endDate',
+                'contents' => $endDate
+            ],
+            [
+                'name'     => 'limit',
+                'contents' => $limit
+            ],
+            [
+                'name'     => 'startAt',
+                'contents' => $startAt
+            ]
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function reportLogWhistlepage($startDate, $endDate, $limit=5000, $startAt=0)
+    {
+        $endpoint = "/report/log/Whistlepage";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'startDate',
+                'contents' => $startDate
+            ],
+            [
+                'name'     => 'endDate',
+                'contents' => $endDate
+            ],
+            [
+                'name'     => 'limit',
+                'contents' => $limit
+            ],
+            [
+                'name'     => 'startAt',
+                'contents' => $startAt
+            ]
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function reportLogDownload($startDate, $endDate, $limit=5000, $startAt=0)
+    {
+        $endpoint = "/report/log/download";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'startDate',
+                'contents' => $startDate
+            ],
+            [
+                'name'     => 'endDate',
+                'contents' => $endDate
+            ],
+            [
+                'name'     => 'limit',
+                'contents' => $limit
+            ],
+            [
+                'name'     => 'startAt',
+                'contents' => $startAt
+            ]
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function reportLogSignature($startDate, $endDate, $limit=5000, $startAt=0)
+    {
+        $endpoint = "/report/log/signature";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'startDate',
+                'contents' => $startDate
+            ],
+            [
+                'name'     => 'endDate',
+                'contents' => $endDate
+            ],
+            [
+                'name'     => 'limit',
+                'contents' => $limit
+            ],
+            [
+                'name'     => 'startAt',
+                'contents' => $startAt
+            ]
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function reportLogSender($startDate, $endDate, $limit=5000, $startAt=0)
+    {
+        $endpoint = "/report/log/sender";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'startDate',
+                'contents' => $startDate
+            ],
+            [
+                'name'     => 'endDate',
+                'contents' => $endDate
+            ],
+            [
+                'name'     => 'limit',
+                'contents' => $limit
+            ],
+            [
+                'name'     => 'startAt',
+                'contents' => $startAt
+            ]
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function reportLogAudit($startDate, $endDate, $limit=5000, $startAt=0)
+    {
+        $endpoint = "/report/log/audit";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'startDate',
+                'contents' => $startDate
+            ],
+            [
+                'name'     => 'endDate',
+                'contents' => $endDate
+            ],
+            [
+                'name'     => 'limit',
+                'contents' => $limit
+            ],
+            [
+                'name'     => 'startAt',
+                'contents' => $startAt
+            ]
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function requestUpload($boxId, $email, $expireDays='3', $note='')
+    {
+        $endpoint = "/request//upload/$boxId";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'email',
+                'contents' => $email
+            ],
+            [
+                'name'     => 'expireDays',
+                'contents' => $expireDays
+            ],
+            [
+                'name'     => 'note',
+                'contents' => $note
+            ],
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function requestWhistlepage($pageId, $email, $expireDays='3', $note='')
+    {
+        $endpoint = "/request/whistlepage/$pageId";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'email',
+                'contents' => $email
+            ],
+            [
+                'name'     => 'expireDays',
+                'contents' => $expireDays
+            ],
+            [
+                'name'     => 'note',
+                'contents' => $note
+            ],
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function requestDownload($fileIds, $email, $accessType, $accessCode='', $expireDays=3, $note='')
+    {
+        $endpoint = "/request/download";
+
+        if (!is_array($fileIds)) {
+            $fileIds = [$fileIds];
+        }
+
+        $params['multipart'] = [
+            [
+                'name'     => 'fileIds',
+                'contents' => $fileIds
+            ],
+            [
+                'name'     => 'accessType',
+                'contents' => $accessType
+            ],
+            [
+                'name'     => 'accessCode',
+                'contents' => $accessCode
+            ],
+            [
+                'name'     => 'email',
+                'contents' => $email
+            ],
+            [
+                'name'     => 'expireDays',
+                'contents' => $expireDays
+            ],
+            [
+                'name'     => 'note',
+                'contents' => $note
+            ],
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+    
+    public function requestSignature($fileIds, $email, $accessType, $accessCode='', $expireDays=3, $note='')
+    {
+        $endpoint = "/request/signature";
+
+        if (!is_array($fileIds)) {
+            $fileIds = [$fileIds];
+        }
+
+        $params['multipart'] = [
+            [
+                'name'     => 'fileIds',
+                'contents' => $fileIds
+            ],
+            [
+                'name'     => 'accessType',
+                'contents' => $accessType
+            ],
+            [
+                'name'     => 'accessCode',
+                'contents' => $accessCode
+            ],
+            [
+                'name'     => 'email',
+                'contents' => $email
+            ],
+            [
+                'name'     => 'expireDays',
+                'contents' => $expireDays
+            ],
+            [
+                'name'     => 'note',
+                'contents' => $note
+            ],
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
     public function userFileUpload($wbaddr, $file_path, $subject='', $note='', $confirmEmail='')
     {
         $endpoint = "/user/file/upload";

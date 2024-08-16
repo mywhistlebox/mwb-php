@@ -1,6 +1,6 @@
 <?php
-// this script is an example of how to post an upload via MyWhistleBox REST Api
-// run from browser https://{your domain or localhost}/rest/package/mwb-php/testing/pkg_test.php
+// this script is used to test the MyWhistleBox REST Api on a local server
+// run from browser http://localhost/mywhistleboxsdk/mwb-php/tests/pkg_test.php?endpoint=<endpoint>
 
 require_once __DIR__."/../vendor/autoload.php";
 
@@ -13,6 +13,7 @@ define("INSTANCE_URL", "https://test.mywhistlebox.com/api/rest/v1.0");
 define("APIKEY", "cd768d97-f7ff-9ba2-51dd-f8d1406e94dd");
 define("DEFAULT_WHISTLEBOX_ADDRESS", "eradin/box");
 define("DEFAULT_TEST_DOCUMENT", "api_test_doc.pdf");
+define("DEFAULT_EMAIL", "eradin@tellami.com");
 
 // INITIALIZATIOIN
 $client = new MwbClient(APIKEY);
@@ -201,6 +202,95 @@ function userMemoUpload($cl)
     }
 }
 
+function reportLogUpload($cl) {
+    $response =  $cl->reportLogUpload('', '');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function reportLogWhistlepage($cl) {
+    $response =  $cl->reportLogWhistlepage('', '');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function reportLogDownload($cl) {
+    $response =  $cl->reportLogDownload('', '');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function reportLogSignature($cl) {
+    $response =  $cl->reportLogSignature('', '');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function reportLogSender($cl) {
+    $response =  $cl->reportLogSender('', '');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function reportLogAudit($cl) {
+    $response =  $cl->reportLogAudit('', '');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function requestUpload($cl, $boxId) {
+    $response =  $cl->requestUpload($boxId, DEFAULT_EMAIL);
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function requestWhistlepage($cl, $pageId) {
+    $response =  $cl->requestWhistlepage($pageId, DEFAULT_EMAIL);
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function requestDownload($cl, $fileId) {
+    $response =  $cl->requestDownload($fileId, DEFAULT_EMAIL, 'NONE');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function requestSignature($cl, $fileId) {
+    $response =  $cl->requestSignature($fileId, DEFAULT_EMAIL, 'NONE');
+    if ($response['status'] == 'ok') {
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
 # START TEST
 
 echo "Test of MWB endpoint: $endpoint<br>\n";
@@ -246,26 +336,30 @@ try {
         folderUpload($endpoint, $folderId);
 
     } elseif ($endpoint == '/report/log/upload') {
-        reportLog($endpoint);
+        reportLogUpload($endpoint);
     } elseif ($endpoint == '/report/log/download') {
-        reportLog($endpoint);
+        reportLogDownload($endpoint);
     } elseif ($endpoint == '/report/log/whistlepage') {
-        reportLog($endpoint);
+        reportLogWhistlepage($endpoint);
     } elseif ($endpoint == '/report/log/signature') {
-        reportLog($endpoint);
+        reportLogSignature($endpoint);
     } elseif ($endpoint == '/report/log/sender') {
-        reportLog($endpoint);
+        reportLogSender($endpoint);
     } elseif ($endpoint == '/report/log/audit') {
-        reportLog($endpoint);
+        reportLogAudit($endpoint);
 
     } elseif (checkEndpoint($endpoint, '/request/upload/\d+')) {
-        requestUpload($endpoint);
+        [$r, $u, $boxId] = explode('/', $endpoint);
+        requestUpload($endpoint, $boxId);
     } elseif (checkEndpoint($endpoint, '/request/whistlepage/\d+')) {
-        requestWhistlepage($endpoint);
+        [$r, $w, $pageId] = explode('/', $endpoint);
+        requestWhistlepage($endpoint, $pageId);
     } elseif (checkEndpoint($endpoint, '/request/signature/?(\d+)?')) {
-        requestSignature($endpoint);
+        [$r, $s, $fileId] = explode('/', $endpoint);
+        requestSignature($endpoint, $fileId);
     } elseif (checkEndpoint($endpoint, '/request/download/?(\d+)?')) {
-        requestDownload($endpoint);
+        [$r, $d, $fileId] = explode('/', $endpoint);
+        requestDownload($endpoint, $fileId);
 
     } elseif ($endpoint == '/user/file/upload') {
         userFileUpload($endpoint);
