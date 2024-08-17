@@ -116,16 +116,29 @@ class MwbClient extends BaseClient
         }
     }
 
-    public function fileDownload($fileId)
+    public function fileDownload($fileId, $downloadDir)
     {
         $endpoint = "/file/download/$fileId";
 
+        $path =  tempnam($downloadDir, "dl");
+
         try {
-            $response = $this->getIt($endpoint);
+            $response = $this->downloadIt($endpoint, ['sink' => $path]);
             if (!$response->ok()) {
                 throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
             }
-            return $response->getContent();
+
+            // get file name
+            $headers = $response->getHeaders();
+
+            // extract the filename from the header
+            preg_match('/filename="(.+?)"/', $headers['Content-Disposition'][0], $matches);
+            $filename = $matches[1];
+
+            // rename temp file
+            rename($path, $downloadDir.'/'.$filename);
+
+            return;
         } catch(\Exception $e) {
             throw new MwbRestException($e->getMessage());
         }
@@ -491,7 +504,7 @@ class MwbClient extends BaseClient
         $params['multipart'] = [
             [
                 'name'     => 'fileIds',
-                'contents' => $fileIds
+                'contents' => implode(',', $fileIds)
             ],
             [
                 'name'     => 'accessType',
@@ -537,7 +550,7 @@ class MwbClient extends BaseClient
         $params['multipart'] = [
             [
                 'name'     => 'fileIds',
-                'contents' => $fileIds
+                'contents' => implode(',', $fileIds)
             ],
             [
                 'name'     => 'accessType',
@@ -695,7 +708,7 @@ class MwbClient extends BaseClient
             ],
             [
                 'name'     => 'fileIds',
-                'contents' => $fileIds
+                'contents' => implode(',', $fileIds)
             ],
             [
                 'name'     => 'confirmEmail',

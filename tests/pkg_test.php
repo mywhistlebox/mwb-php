@@ -10,10 +10,18 @@ use Mwb\MwbClient;
 
 // these should be updated to reflect the current account
 define("INSTANCE_URL", "https://test.mywhistlebox.com/api/rest/v1.0");
-define("APIKEY", "cd768d97-f7ff-9ba2-51dd-f8d1406e94dd");
-define("DEFAULT_WHISTLEBOX_ADDRESS", "eradin/box");
+define("APIKEY", "dae57b7c-8a60-4a02-2bbf-921b64c0b669");
+define("DEFAULT_WHISTLEBOX_ADDRESS", "apitest/box");
+define("DEFAULT_REQUEST_EMAIL", "eradin1@gmail.com");
+define("TMPDIR", "./downloads/");
+
+// standard defaults
 define("DEFAULT_TEST_DOCUMENT", "api_test_doc.pdf");
-define("DEFAULT_EMAIL", "eradin@tellami.com");
+define("DEFAULT_REQUEST_EXPIRES_DAYS", "1");
+define("DEFAULT_REQUEST_ACCESS_TYPE", "NONE");
+define("DEFAULT_REQUEST_ACCESS_CODE", "");
+define("DEFAULT_START_DATE", "");
+define("DEFAULT_END_DATE", "");
 
 // INITIALIZATIOIN
 $client = new MwbClient(APIKEY);
@@ -22,6 +30,10 @@ $client->setBaseUrl(INSTANCE_URL);  // optional, default is production at mywhis
 // add to url as ?endpoint=<endpoint>
 $endpoint = isset($_REQUEST['endpoint']) ? $_REQUEST['endpoint'] : '/test/ping';
 
+// optional type override
+$httptype = isset($_REQUEST['httptype']) ? $_REQUEST['httptype'] : '';
+
+// helper functions
 function response_error($resp)
 {
     if ($resp['status'] == 'access') {
@@ -37,6 +49,7 @@ function checkEndpoint($string, $re)
 }
 
 
+// endpoint functions
 
 function testPing($cl)
 {
@@ -116,13 +129,8 @@ function fileInfo($cl, $fileId)
 
 function fileDownload($cl, $fileId)
 {
-    $response =  $cl->listMemos($fileId);
-    if ($response['status'] == 'ok') {
-        echo "RESULT: <br>\n";
-        print_r($response);
-    } else {
-        response_error($response);
-    }
+    $response =  $cl->fileDownload($fileId, TMPDIR);
+    echo "RESULT: Downloaded file to ".TMPDIR."<br>\n";
 }
 
 function memo($cl, $fileId)
@@ -184,7 +192,7 @@ function userFileSend($cl, $fileId)
 {
     $response =  $cl->userFileSend(DEFAULT_WHISTLEBOX_ADDRESS, $fileId);
     if ($response['status'] == 'ok') {
-        echo 'RESULT: File "'.$response['sentFile'][0]['name'].'" uploaded to "'.DEFAULT_WHISTLEBOX_ADDRESS.'"<br>';
+        echo 'RESULT: File "'.$response['sentStatus'][0]['file'].'" uploaded to "'.DEFAULT_WHISTLEBOX_ADDRESS.'"<br>';
         print_r($response);
     } else {
         response_error($response);
@@ -203,7 +211,7 @@ function userMemoUpload($cl)
 }
 
 function reportLogUpload($cl) {
-    $response =  $cl->reportLogUpload('', '');
+    $response =  $cl->reportLogUpload(DEFAULT_START_DATE, DEFAULT_END_DATE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -212,7 +220,7 @@ function reportLogUpload($cl) {
 }
 
 function reportLogWhistlepage($cl) {
-    $response =  $cl->reportLogWhistlepage('', '');
+    $response =  $cl->reportLogWhistlepage(DEFAULT_START_DATE, DEFAULT_END_DATE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -221,7 +229,7 @@ function reportLogWhistlepage($cl) {
 }
 
 function reportLogDownload($cl) {
-    $response =  $cl->reportLogDownload('', '');
+    $response =  $cl->reportLogDownload(DEFAULT_START_DATE, DEFAULT_END_DATE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -230,7 +238,7 @@ function reportLogDownload($cl) {
 }
 
 function reportLogSignature($cl) {
-    $response =  $cl->reportLogSignature('', '');
+    $response =  $cl->reportLogSignature(DEFAULT_START_DATE, DEFAULT_END_DATE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -239,7 +247,7 @@ function reportLogSignature($cl) {
 }
 
 function reportLogSender($cl) {
-    $response =  $cl->reportLogSender('', '');
+    $response =  $cl->reportLogSender(DEFAULT_START_DATE, DEFAULT_END_DATE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -248,7 +256,7 @@ function reportLogSender($cl) {
 }
 
 function reportLogAudit($cl) {
-    $response =  $cl->reportLogAudit('', '');
+    $response =  $cl->reportLogAudit(DEFAULT_START_DATE, DEFAULT_END_DATE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -257,7 +265,7 @@ function reportLogAudit($cl) {
 }
 
 function requestUpload($cl, $boxId) {
-    $response =  $cl->requestUpload($boxId, DEFAULT_EMAIL);
+    $response =  $cl->requestUpload($boxId, DEFAULT_REQUEST_EMAIL);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -266,7 +274,7 @@ function requestUpload($cl, $boxId) {
 }
 
 function requestWhistlepage($cl, $pageId) {
-    $response =  $cl->requestWhistlepage($pageId, DEFAULT_EMAIL);
+    $response =  $cl->requestWhistlepage($pageId, DEFAULT_REQUEST_EMAIL);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -275,7 +283,7 @@ function requestWhistlepage($cl, $pageId) {
 }
 
 function requestDownload($cl, $fileId) {
-    $response =  $cl->requestDownload($fileId, DEFAULT_EMAIL, 'NONE');
+    $response =  $cl->requestDownload($fileId, DEFAULT_REQUEST_EMAIL, DEFAULT_REQUEST_ACCESS_TYPE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -284,7 +292,7 @@ function requestDownload($cl, $fileId) {
 }
 
 function requestSignature($cl, $fileId) {
-    $response =  $cl->requestSignature($fileId, DEFAULT_EMAIL, 'NONE');
+    $response =  $cl->requestSignature($fileId, DEFAULT_REQUEST_EMAIL, DEFAULT_REQUEST_ACCESS_TYPE);
     if ($response['status'] == 'ok') {
         print_r($response);
     } else {
@@ -305,69 +313,69 @@ try {
     } elseif ($endpoint == '/list/pages') {
         listPages($client);
     } elseif (checkEndpoint($endpoint, '/list/folders/\d+')) {
-        [$l, $f, $parentId] = explode('/', $endpoint);
-        listFolders($client, $parentId);
+        $ps = explode('/', $endpoint);
+        listFolders($client, $ps[3]);
     } elseif (checkEndpoint($endpoint, '/list/files/\d+')) {
-        [$l, $f, $folderId] = explode('/', $endpoint);
-        listfiles($client, $folderId);
+        $ps = explode('/', $endpoint);
+        listfiles($client, $ps[3]);
     } elseif (checkEndpoint($endpoint, '/list/memos/\d+')) {
-        [$l, $m, $folderId] = explode('/', $endpoint);
-        listMemos($client, $folderId);
+        $ps = explode('/', $endpoint);
+        listMemos($client, $ps[3]);
 
     } elseif (checkEndpoint($endpoint, '/file/info/\d+')) {
-        [$f, $i, $fileId] = explode('/', $endpoint);
-        fileInfo($client, $fileId);
+        $ps = explode('/', $endpoint);
+        fileInfo($client, $ps[3]);
     } elseif (checkEndpoint($endpoint, '/file/download/\d+')) {
-        [$f, $d, $fileId] = explode('/', $endpoint);
-        fileDownload($endpoint, $fileId);
+        $ps = explode('/', $endpoint);
+        fileDownload($client, $ps[3]);
 
     } elseif (checkEndpoint($endpoint, '/memo/\d+') && strtoupper($httptype == 'P')) {
-        [$m, $folderId] = explode('/', $endpoint);
-        memoAdd($client, $folderId);
+        $ps = explode('/', $endpoint);
+        memoAdd($client, $ps[2]);
     } elseif (checkEndpoint($endpoint, '/memo/\d+')) {
-        [$m, $folderId] = explode('/', $endpoint);
-        memo($client, $folderId);
+        $ps = explode('/', $endpoint);
+        memo($client, $ps[2]);
 
     } elseif (checkEndpoint($endpoint, '/folder/\d+')) {
-        [$f, $folderId] = explode('/', $endpoint);
-        folder($client, $folderId);
+        $ps = explode('/', $endpoint);
+        folder($client, $ps[2]);
     } elseif (checkEndpoint($endpoint, '/folder/upload/\d+')) {
-        [$f, $u, $folderId] = explode('/', $endpoint);
-        folderUpload($endpoint, $folderId);
+        $ps = explode('/', $endpoint);
+        folderUpload($client, $ps[3]);
 
     } elseif ($endpoint == '/report/log/upload') {
-        reportLogUpload($endpoint);
+        reportLogUpload($client);
     } elseif ($endpoint == '/report/log/download') {
-        reportLogDownload($endpoint);
+        reportLogDownload($client);
     } elseif ($endpoint == '/report/log/whistlepage') {
-        reportLogWhistlepage($endpoint);
+        reportLogWhistlepage($client);
     } elseif ($endpoint == '/report/log/signature') {
-        reportLogSignature($endpoint);
+        reportLogSignature($client);
     } elseif ($endpoint == '/report/log/sender') {
-        reportLogSender($endpoint);
+        reportLogSender($client);
     } elseif ($endpoint == '/report/log/audit') {
-        reportLogAudit($endpoint);
+        reportLogAudit($client);
 
     } elseif (checkEndpoint($endpoint, '/request/upload/\d+')) {
-        [$r, $u, $boxId] = explode('/', $endpoint);
-        requestUpload($endpoint, $boxId);
+        $ps = explode('/', $endpoint);
+        requestUpload($client, $ps[3]);
     } elseif (checkEndpoint($endpoint, '/request/whistlepage/\d+')) {
-        [$r, $w, $pageId] = explode('/', $endpoint);
-        requestWhistlepage($endpoint, $pageId);
+        $ps = explode('/', $endpoint);
+        requestWhistlepage($client, $ps[3]);
     } elseif (checkEndpoint($endpoint, '/request/signature/?(\d+)?')) {
-        [$r, $s, $fileId] = explode('/', $endpoint);
-        requestSignature($endpoint, $fileId);
+        $ps = explode('/', $endpoint);
+        requestSignature($client, $ps[3]);
     } elseif (checkEndpoint($endpoint, '/request/download/?(\d+)?')) {
-        [$r, $d, $fileId] = explode('/', $endpoint);
-        requestDownload($endpoint, $fileId);
+        $ps = explode('/', $endpoint);
+        requestDownload($client, $ps[3]);
 
     } elseif ($endpoint == '/user/file/upload') {
-        userFileUpload($endpoint);
+        userFileUpload($client);
     } elseif (checkEndpoint($endpoint, '/user/file/send/?(\d+)?')) {
-        [$u, $f, $s, $fileId] = explode('/', $endpoint);
-        userFileSend($endpoint, $fileId);
+        $ps = explode('/', $endpoint);
+        userFileSend($client, $ps[4]);
     } elseif ($endpoint == '/user/memo/upload') {
-        userMemoUpload($endpoint);
+        userMemoUpload($client);
     } else {
         echo "ERROR: Invalid endpoint.  Please check the programmers guide for proper format.";
     }

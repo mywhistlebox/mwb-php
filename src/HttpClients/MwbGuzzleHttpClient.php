@@ -94,11 +94,10 @@ class MwbGuzzleHttpClient implements MwbHttpClientInterface
      */
     public function send_request($url, $method, $body, $headers, $timeOut, $request)
     {
-        //$headers["Authorization"] = "Basic " . base64_encode("$this->authKey:$this->authPin");
         $headers["Authorization"] = "Basic " . $this->authKey;
-        $request->setHeaders($headers);
 
-        $options =[];
+        $options = $request->getOptions();
+
         $requestBody = json_encode($request->getParams());
         if(empty($request->getParams())){
             $requestBody = json_encode($request->getParams(), JSON_FORCE_OBJECT);
@@ -106,20 +105,22 @@ class MwbGuzzleHttpClient implements MwbHttpClientInterface
         if(isset($body['multipart'])){
             $requestBody = json_encode($request->getParams(), JSON_FORCE_OBJECT);
             unset($headers['Content-type']);
-            $options = [
+            $options = array_merge($options, 
+            [
                 'http_errors' => false,
                 'headers' => $headers,
                 'timeout' => $timeOut,
                 'connect_timeout' => 160,
                 'multipart' => $body['multipart']
-            ];
+            ]);
         } else{
-            $options = [
+            $options = array_merge($options, 
+            [
                 'http_errors' => false,
                 'headers' => $headers,
                 'timeout' => $timeOut,
                 'connect_timeout' => 60,
-            ];
+            ]);
         }
         if($method != "GET"){
             $options['body'] = $requestBody;

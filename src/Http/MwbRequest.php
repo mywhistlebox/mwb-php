@@ -33,6 +33,11 @@ class MwbRequest
     protected $params = [];
 
     /**
+     * @var array The options to send with this request.
+     */
+    protected $options = [];
+
+    /**
      * @var string api version to use for this request.
      */
     protected $apiVersion;
@@ -53,12 +58,14 @@ class MwbRequest
         $endpoint = null,
         array $params = [],
         array $headers = [],
+        array $options = [],
         $apiVersion = null)
     {
         $this->setMethod($method);
         $this->setEndpoint($endpoint);
         $this->setHeaders($headers);
         $this->setParams($params);
+        $this->setOptions($options);
         $this->apiVersion = $apiVersion ?: Version::DEFAULT_API_VERSION;
         $this->phpVersion = phpversion();
     }
@@ -175,6 +182,32 @@ class MwbRequest
     }
 
     /**
+     * Set the params for this request.
+     *
+     * @param array $options
+     *
+     * @return MwbRequest
+     *
+     * @throws MwbRestException
+     */
+    public function setOptions(array $options = [])
+    {
+        $this->options = array_merge($this->options, $options);
+
+        return $this;
+    }
+
+   /**
+    * Generate and return the options for this request.
+    *
+    * @return array
+    */
+   public function getOptions()
+   {
+       return $this->options;
+   }
+
+   /**
      * Set the params for this request.
      *
      * @param array $params

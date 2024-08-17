@@ -152,16 +152,30 @@ class BaseClient
     }
 
     /**
+     * downloadIt method
+     * @param string $endpoint
+     * @param array $params
+     * @return MwbResponse
+     */
+    public function downloadIt($endpoint, array $options=[])
+    {
+        $request =
+            new MwbRequest(
+                'GET', $endpoint, [], [], ArrayOperations::removeNull($options));
+        return $this->sendRequest($request);
+    }
+
+    /**
      * getIt method
      * @param string $endpoint
      * @param array $params
      * @return MwbResponse
      */
-    public function getIt($endpoint, array $params=[])
+    public function getIt($endpoint, array $params=[], array $options=[])
     {
         $request =
             new MwbRequest(
-                'GET', $endpoint, ArrayOperations::removeNull($params));
+                'GET', $endpoint, ArrayOperations::removeNull($params), ArrayOperations::removeNull($options));
         return $this->sendRequest($request);
     }
 
@@ -171,11 +185,11 @@ class BaseClient
      * @param $params
      * @return MwbResponse
      */
-    public function postIt($endpoint, array $params=[])
+    public function postIt($endpoint, array $params=[], array $options=[])
     {
         $request =
             new MwbRequest(
-                'POST', $endpoint, ArrayOperations::removeNull($params));
+                'POST', $endpoint, ArrayOperations::removeNull($params), ArrayOperations::removeNull($options));
         return $this->sendRequest($request);
     }
 
@@ -185,11 +199,11 @@ class BaseClient
      * @param array $params
      * @return MwbResponse
      */
-    public function deleteIt($endpoint, array $params=[])
+    public function deleteIt($endpoint, array $params=[], array $options=[])
     {
         $request =
             new MwbRequest(
-                'DELETE', $endpoint, ArrayOperations::removeNull($params));
+                'DELETE', $endpoint, ArrayOperations::removeNull($params), ArrayOperations::removeNull($options));
 
         return $this->sendRequest($request);
     }
