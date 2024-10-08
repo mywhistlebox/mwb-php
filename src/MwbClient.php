@@ -435,7 +435,7 @@ class MwbClient extends BaseClient
 
     public function requestUpload($boxId, $email, $expireDays='3', $note='')
     {
-        $endpoint = "/request//upload/$boxId";
+        $endpoint = "/request/upload/$boxId";
 
         $params['multipart'] = [
             [
