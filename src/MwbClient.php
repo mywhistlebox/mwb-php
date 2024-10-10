@@ -11,6 +11,13 @@ use GuzzleHttp\Psr7\Utils;
  */
 class MwbClient extends BaseClient
 {
+    public const accessNONE = 'NONE';
+    public const accessZIP5 = 'ZIP5';
+    public const accessSSN4 = 'SSN4';
+    public const accessSSN5 = 'SSN5';
+    public const accessPHONE4 = 'PHONE4';
+    public const accessCUSTOM = 'CUSTOM';
+
     public function ping()
     {
         $endpoint = "/test/ping";

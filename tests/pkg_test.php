@@ -18,7 +18,7 @@ define("TMPDIR", "./downloads/");
 // standard defaults
 define("DEFAULT_TEST_DOCUMENT", "api_test_doc.pdf");
 define("DEFAULT_REQUEST_EXPIRES_DAYS", "1");
-define("DEFAULT_REQUEST_ACCESS_TYPE", "NONE");
+define("DEFAULT_REQUEST_ACCESS_TYPE", MwbClient::accessNONE);
 define("DEFAULT_REQUEST_ACCESS_CODE", "");
 define("DEFAULT_START_DATE", "");
 define("DEFAULT_END_DATE", "");

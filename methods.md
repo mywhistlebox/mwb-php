@@ -38,6 +38,14 @@ The MyWhistleBox SDK API supports a number of methods to perform various actions
     requestSignature(array fileIds, email, accessType, accessCode='', expireDays=3, note='')
     requestDownload(array fileIds, email, accessType, accessCode='', expireDays=3, note='')
 
+**Note:** accessType can be any of the following constants: 
+* MwbClient::accessNone
+* MwbClient::accessZIP5
+* MwbClient::accessSSN4
+* MwbClient::accessSSN5
+* MwbClient::accessPHONE4
+* MwbClient::accessCustom
+
 ## Report Methods
 
     reportLogUpload(startDate, endDate, limit=5000, startAt=0)
