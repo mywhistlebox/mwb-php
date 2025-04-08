@@ -1,6 +1,6 @@
 # MyWhistleBox Methods
 
-The MyWhistleBox SDK API supports a number of methods to perform various actions on the server account.  These methods are grouped by category.  It may be neccesary to make a number of calls to obtain the required paramters.  For example, listFiles required a folderId.  You can query the folder Id's by calling listBoxes or listFolders as both of those will return a list of folderId's.  More information can be found at http://mywhistlebox.com/developer.
+The MyWhistleBox SDK API supports a number of methods to perform various actions on the server account.  These methods are grouped by category.  It may be neccesary to make several calls to obtain the required parameters.  For example, listFiles requires a folderId.  You can query the folder Id's by calling listBoxes or listFolders as both of those will return a list of folderId's.  Additional information can be found at http://mywhistlebox.com/developer.
 
 ## List Methods
 
@@ -9,12 +9,14 @@ The MyWhistleBox SDK API supports a number of methods to perform various actions
     listFolders(parentFolderId)
     listFiles(folderId)
     listMemos(folderId)
+    listTemplates()
 
 ## User Methods
 
     userFileUpload(whistleBoxAddress, fileContents, fileName, subject='', note='', confirmEmail='')
     userMemoUpload(whistleBoxAddress, title, text)
     userfileSend(whistleBoxAddress, array fileIds, confirmEmail='', note='')
+    userfileSendsign(whistleBoxAddress, fileId, templateId=0, note='')
 
 ## Folder Methods
 
@@ -25,6 +27,7 @@ The MyWhistleBox SDK API supports a number of methods to perform various actions
 
     fileInfo(fileId)
     fileDownload(fileId, downloadDirectory)
+    fileSearch(filters=[])
 
 ## Memo Methods
 
@@ -35,7 +38,7 @@ The MyWhistleBox SDK API supports a number of methods to perform various actions
 
     requestUpload(boxId, email, expireDays='3', note='')
     requestWhistlepage(pageId, email, expireDays='3', note='')
-    requestSignature(array fileIds, email, accessType, accessCode='', expireDays=3, note='')
+    requestSignature(array fileIds, email, accessType, accessCode='', templateId=0, expireDays=3, note='')
     requestDownload(array fileIds, email, accessType, accessCode='', expireDays=3, note='')
 
 **Note:** accessType can be any of the following constants: 

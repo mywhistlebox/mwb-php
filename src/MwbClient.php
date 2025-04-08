@@ -108,6 +108,21 @@ class MwbClient extends BaseClient
         }
     }
 
+    public function listTemplates()
+    {
+        $endpoint = "/list/templates";
+
+        try {
+            $response = $this->getIt($endpoint);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
     public function fileInfo($fileId)
     {
         $endpoint = "/file/info/$fileId";
@@ -146,6 +161,53 @@ class MwbClient extends BaseClient
             rename($path, $downloadDir.'/'.$filename);
 
             return;
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function fileSearch($filters = [])
+    {
+        $endpoint = "/file/search";
+
+        $params['multipart'] = [];
+        if (isset($filters['srchName'])) {
+            $params['multipart'][] = ['name'=> 'srchName','contents' => $filters['srchName']];
+        }
+        if (isset($filters['srchSubject'])) {
+            $params['multipart'][] = ['name'=> 'srchSubject','contents' => $filters['srchSubject']];
+        }
+        if (isset($filters['srchSender'])) {
+            $params['multipart'][] = ['name'=> 'srchSender','contents' => $filters['srchSender']];
+        }
+        if (isset($filters['srchDateFrom'])) {
+            $params['multipart'][] = ['name'=> 'srchDateFrom','contents' => $filters['srchDateFrom']];
+        }
+        if (isset($filters['srchDateTo'])) {
+            $params['multipart'][] = ['name'=> 'srchDateTo','contents' => $filters['srchDateTo']];
+        }
+        if (isset($filters['srchUnread'])) {
+            $params['multipart'][] = ['name'=> 'srchUnread','contents' => $filters['srchUnread'] ? 1 : 0];
+        }
+        if (isset($filters['srchSigned'])) {
+            $params['multipart'][] = ['name'=> 'srchSigned','contents' => $filters['srchSigned'] ? 1 : 0];
+        }
+        if (isset($filters['srchTrash'])) {
+            $params['multipart'][] = ['name'=> 'srchTrash','contents' => $filters['srchTrash'] ? 1 : 0];
+        }
+        if (isset($filters['srchWhistlePage'])) {
+            $params['multipart'][] = ['name'=> 'srchWhistlePage','contents' => $filters['srchWhistlePage'] ? 1 : 0];
+        }
+        if (isset($filters['srchTemplates'])) {
+            $params['multipart'][] = ['name'=> 'srchTemplates','contents' => $filters['srchTemplates'] ? 1 : 0];
+        }
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
         } catch(\Exception $e) {
             throw new MwbRestException($e->getMessage());
         }
@@ -510,7 +572,7 @@ class MwbClient extends BaseClient
 
         $params['multipart'] = [
             [
-                'name'     => 'fileIds',
+                'name'     => 'file_ids',
                 'contents' => implode(',', $fileIds)
             ],
             [
@@ -546,7 +608,7 @@ class MwbClient extends BaseClient
         }
     }
     
-    public function requestSignature($fileIds, $email, $accessType, $accessCode='', $expireDays=3, $note='')
+    public function requestSignature($fileIds, $email, $accessType, $accessCode='', $templateId=0, $expireDays=3, $note='')
     {
         $endpoint = "/request/signature";
 
@@ -556,7 +618,7 @@ class MwbClient extends BaseClient
 
         $params['multipart'] = [
             [
-                'name'     => 'fileIds',
+                'name'     => 'file_ids',
                 'contents' => implode(',', $fileIds)
             ],
             [
@@ -570,6 +632,10 @@ class MwbClient extends BaseClient
             [
                 'name'     => 'email',
                 'contents' => $email
+            ],
+            [
+                'name'     => 'template_id',
+                'contents' => $templateId
             ],
             [
                 'name'     => 'expireDays',
@@ -714,12 +780,46 @@ class MwbClient extends BaseClient
                 'contents' => $wbaddr
             ],
             [
-                'name'     => 'fileIds',
+                'name'     => 'file_ids',
                 'contents' => implode(',', $fileIds)
             ],
             [
                 'name'     => 'confirmEmail',
                 'contents' => $confirmEmail
+            ],
+            [
+                'name'     => 'note',
+                'contents' => $note
+            ],
+        ];
+
+        try {
+            $response = $this->postIt($endpoint, $params);
+            if (!$response->ok()) {
+                throw new MwbRestException('URL Endpoint not found. Please check to make sure path is correct.');
+            }
+            return $response->getContent();
+        } catch(\Exception $e) {
+            throw new MwbRestException($e->getMessage());
+        }
+    }
+
+    public function userFileSendsign($wbaddr, $fileId, $templateId=0, $note='')
+    {
+        $endpoint = "/user/file/send";
+
+        $params['multipart'] = [
+            [
+                'name'     => 'address',
+                'contents' => $wbaddr
+            ],
+            [
+                'name'     => 'file_id',
+                'contents' => $fileId
+            ],
+            [
+                'name'     => 'template_id',
+                'contents' => $templateId
             ],
             [
                 'name'     => 'note',

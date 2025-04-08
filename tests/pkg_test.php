@@ -116,6 +116,17 @@ function listMemos($cl, $folderId)
     }
 }
 
+function listTemplates($cl)
+{
+    $response =  $cl->listTemplates();
+    if ($response['status'] == 'ok') {
+        echo "RESULT: <br>\n";
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
 function fileInfo($cl, $fileId)
 {
     $response =  $cl->fileInfo($fileId);
@@ -131,6 +142,17 @@ function fileDownload($cl, $fileId)
 {
     $response =  $cl->fileDownload($fileId, TMPDIR);
     echo "RESULT: Downloaded file to ".TMPDIR."<br>\n";
+}
+
+function fileSearch($cl, $filters=[])
+{
+    $response =  $cl->fileSearch($filters);
+    if ($response['status'] == 'ok') {
+        echo "RESULT: <br>\n";
+        print_r($response);
+    } else {
+        response_error($response);
+    }
 }
 
 function memo($cl, $fileId)
@@ -191,6 +213,17 @@ function userFileUpload($cl)
 function userFileSend($cl, $fileId)
 {
     $response =  $cl->userFileSend(DEFAULT_WHISTLEBOX_ADDRESS, $fileId);
+    if ($response['status'] == 'ok') {
+        echo 'RESULT: File "'.$response['sentStatus'][0]['file'].'" uploaded to "'.DEFAULT_WHISTLEBOX_ADDRESS.'"<br>';
+        print_r($response);
+    } else {
+        response_error($response);
+    }
+}
+
+function userFileSendsign($cl, $fileId)
+{
+    $response =  $cl->userFileSendsign(DEFAULT_WHISTLEBOX_ADDRESS, $fileId);
     if ($response['status'] == 'ok') {
         echo 'RESULT: File "'.$response['sentStatus'][0]['file'].'" uploaded to "'.DEFAULT_WHISTLEBOX_ADDRESS.'"<br>';
         print_r($response);
@@ -321,6 +354,9 @@ try {
     } elseif (checkEndpoint($endpoint, '/list/memos/\d+')) {
         $ps = explode('/', $endpoint);
         listMemos($client, $ps[3]);
+    } elseif (checkEndpoint($endpoint, '/list/templates')) {
+        $ps = explode('/', $endpoint);
+        listTemplates($client);
 
     } elseif (checkEndpoint($endpoint, '/file/info/\d+')) {
         $ps = explode('/', $endpoint);
@@ -328,6 +364,9 @@ try {
     } elseif (checkEndpoint($endpoint, '/file/download/\d+')) {
         $ps = explode('/', $endpoint);
         fileDownload($client, $ps[3]);
+    } elseif (checkEndpoint($endpoint, '/file/search')) {
+        $ps = explode('/', $endpoint);
+        fileSearch($client);
 
     } elseif (checkEndpoint($endpoint, '/memo/\d+') && strtoupper($httptype == 'P')) {
         $ps = explode('/', $endpoint);
@@ -374,6 +413,9 @@ try {
     } elseif (checkEndpoint($endpoint, '/user/file/send/?(\d+)?')) {
         $ps = explode('/', $endpoint);
         userFileSend($client, $ps[4]);
+    } elseif (checkEndpoint($endpoint, '/user/file/sendsign/(\d+)?')) {
+        $ps = explode('/', $endpoint);
+        userFileSendsign($client, $ps[4]);
     } elseif ($endpoint == '/user/memo/upload') {
         userMemoUpload($client);
     } else {
