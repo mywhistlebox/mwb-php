@@ -1,5 +1,5 @@
 <?php
-// this script is used to test the MyWhistleBox REST Api on a local server
+// this script is used to test the MyWhistleBox SDK from a local server
 // run from browser http://localhost/mywhistleboxsdk/mwb-php/tests/pkg_test.php?endpoint=<endpoint>
 
 require_once __DIR__."/../vendor/autoload.php";
@@ -11,9 +11,10 @@ use Mwb\MwbClient;
 // these should be updated to reflect the current account
 define("INSTANCE_URL", "https://test.mywhistlebox.com/api/rest/v1.0");
 define("APIKEY", "dae57b7c-8a60-4a02-2bbf-921b64c0b669");
+define("TMPDIR", "./downloads/");
+
 define("DEFAULT_WHISTLEBOX_ADDRESS", "apitest/box");
 define("DEFAULT_REQUEST_EMAIL", "eradin1@gmail.com");
-define("TMPDIR", "./downloads/");
 
 // standard defaults
 define("DEFAULT_TEST_DOCUMENT", "api_test_doc.pdf");
